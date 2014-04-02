@@ -19,12 +19,12 @@ class GenericItem
       self.quality = 0 if sell_in < 1
     else
       decrement = sell_in < 1 ?  2 : 1
-      self.quality -= decrement unless quality <= 0 || non_degrading?
+      self.quality -= decrement unless quality <= 0
     end
   end
 
   def decrease_sell_in
-    self.sell_in -= 1 unless legendary?
+    self.sell_in -= 1
   end
 
   private
@@ -33,14 +33,6 @@ class GenericItem
 
   def increasing_quality?
     backstage_pass?
-  end
-
-  def non_degrading?
-    legendary?
-  end
-
-  def legendary?
-    self.name == 'Sulfuras, Hand of Ragnaros'
   end
 
   def backstage_pass?
