@@ -1,4 +1,9 @@
+require "forwardable"
+
 class GenericItem
+  extend Forwardable
+  def_delegators :@item, :name, :quality, :quality=, :sell_in, :sell_in=
+
   MAXIMUM_QUALITY = 50
 
   def initialize item
@@ -7,19 +12,19 @@ class GenericItem
 
   def adjust_quality
     if increasing_quality?
-      item.quality = [MAXIMUM_QUALITY, item.quality + quality_increment_for].min
+      self.quality = [MAXIMUM_QUALITY, quality + quality_increment_for].min
     end
 
     if backstage_pass?
-      item.quality = 0 if item.sell_in < 1
+      self.quality = 0 if sell_in < 1
     else
-      decrement = item.sell_in < 1 ?  2 : 1
-      item.quality -= decrement unless item.quality <= 0 || non_degrading?
+      decrement = sell_in < 1 ?  2 : 1
+      self.quality -= decrement unless quality <= 0 || non_degrading?
     end
   end
 
   def decrease_sell_in
-    item.sell_in -= 1 unless legendary?
+    self.sell_in -= 1 unless legendary?
   end
 
   private
@@ -35,18 +40,18 @@ class GenericItem
   end
 
   def legendary?
-    item.name == 'Sulfuras, Hand of Ragnaros'
+    self.name == 'Sulfuras, Hand of Ragnaros'
   end
 
   def backstage_pass?
-    item.name == 'Backstage passes to a TAFKAL80ETC concert'
+    self.name == 'Backstage passes to a TAFKAL80ETC concert'
   end
 
   def quality_increment_for
     if backstage_pass?
-      if item.sell_in < 6
+      if sell_in < 6
         return 3
-      elsif item.sell_in < 11
+      elsif sell_in < 11
         return 2
       end
     end
