@@ -1,10 +1,8 @@
 class GenericItem
+  MAXIMUM_QUALITY = 50
+
   def initialize item
     @item = item
-  end
-
-  def self.for item
-    new item
   end
 
   def adjust_quality
@@ -29,11 +27,11 @@ class GenericItem
   attr_reader :item
 
   def increasing_quality?
-    brie? || backstage_pass?
+    backstage_pass?
   end
 
   def non_degrading?
-    legendary? || brie?
+    legendary?
   end
 
   def legendary?
@@ -44,14 +42,8 @@ class GenericItem
     item.name == 'Backstage passes to a TAFKAL80ETC concert'
   end
 
-  def brie?
-    item.name == 'Aged Brie'
-  end
-
   def quality_increment_for
-    if brie? && item.sell_in < 1
-      return 2
-    elsif backstage_pass?
+    if backstage_pass?
       if item.sell_in < 6
         return 3
       elsif item.sell_in < 11

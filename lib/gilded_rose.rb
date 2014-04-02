@@ -1,9 +1,7 @@
-require "generic_item"
-
-MAXIMUM_QUALITY = 50
+require "item_factory"
 
 def update_quality(items)
-  items.map {|i| GenericItem.for(i) }.each do |item|
+  items.map {|i| ItemFactory.for(i) }.each do |item|
     item.adjust_quality
     item.decrease_sell_in
   end
