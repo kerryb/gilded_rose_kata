@@ -11,16 +11,8 @@ class GenericItem
   end
 
   def adjust_quality
-    if increasing_quality?
-      self.quality = [MAXIMUM_QUALITY, quality + quality_increment_for].min
-    end
-
-    if backstage_pass?
-      self.quality = 0 if sell_in < 1
-    else
-      decrement = sell_in < 1 ?  2 : 1
-      self.quality -= decrement unless quality <= 0
-    end
+    decrement = sell_in < 1 ?  2 : 1
+    self.quality = [0, quality - decrement].max
   end
 
   def decrease_sell_in
@@ -30,23 +22,4 @@ class GenericItem
   private
 
   attr_reader :item
-
-  def increasing_quality?
-    backstage_pass?
-  end
-
-  def backstage_pass?
-    self.name == 'Backstage passes to a TAFKAL80ETC concert'
-  end
-
-  def quality_increment_for
-    if backstage_pass?
-      if sell_in < 6
-        return 3
-      elsif sell_in < 11
-        return 2
-      end
-    end
-    return 1
-  end
 end
