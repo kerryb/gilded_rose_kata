@@ -11,8 +11,7 @@ class GenericItem
   end
 
   def adjust_quality
-    decrement = sell_in < 1 ?  2 : 1
-    self.quality = [0, quality - decrement].max
+    self.quality = [0, quality - quality_decrement_rate].max
   end
 
   def decrease_sell_in
@@ -22,4 +21,8 @@ class GenericItem
   private
 
   attr_reader :item
+
+  def quality_decrement_rate
+    sell_in < 1 ?  2 : 1
+  end
 end
